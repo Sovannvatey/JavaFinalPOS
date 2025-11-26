@@ -15,7 +15,6 @@ public abstract class Product {
         this.discountPercentage = discountPercentage;
     }
 
-    // Getters
     public String getId() {
         return id;
     }
@@ -36,23 +35,20 @@ public abstract class Product {
         return discountPercentage;
     }
 
-    // Setters
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    // Abstract method for polymorphism
     public abstract String getCategory();
 
-    // Calculate price after discount
     public double getPriceAfterDiscount() {
         return price - (price * discountPercentage / 100);
     }
 
-    // Decrease quantity when sold
     public void decreaseQuantity(int amount) {
         if (quantity >= amount) {
             quantity -= amount;
         }
     }
 }
+
