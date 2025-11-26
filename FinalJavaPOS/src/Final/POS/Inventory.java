@@ -1,6 +1,5 @@
 package Final.POS;
 
-// Inventory.java
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,3 +64,4 @@ public class Inventory {
         }
     }
 }
+
