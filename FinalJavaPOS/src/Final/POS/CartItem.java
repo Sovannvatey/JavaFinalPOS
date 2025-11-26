@@ -1,5 +1,6 @@
 package Final.POS;
 
+// CartItem.java
 public class CartItem {
     private Product product;
     private int quantity;
@@ -29,3 +30,4 @@ public class CartItem {
         return product.getPriceAfterDiscount() * quantity;
     }
 }
+
