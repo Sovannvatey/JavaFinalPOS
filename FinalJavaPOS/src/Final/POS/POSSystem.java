@@ -1,5 +1,4 @@
 package Final.POS;
-
 public class POSSystem {
     private Inventory inventory;
     private Cart cart;
@@ -111,5 +110,105 @@ public class POSSystem {
     private void addItemToCart() {
         System.out.print("\nEnter Product ID (e.g., 001): ");
         String id = scanner.nextLine();
+        
+        Product product = inventory.findProductById(id);
+        if (product == null) {
+            System.out.println("\n✗ Product not found!");
+            return;
+        }
+
+        if (product.getQuantity() == 0) {
+            System.out.println("\n✗ Product is out of stock!");
+            return;
+        }
+
+        System.out.print("Enter quantity: ");
+        try {
+            int quantity = scanner.nextInt();
+            scanner.nextLine();
+
+            if (quantity <= 0) {
+                System.out.println("\n✗ Quantity must be positive!");
+                return;
+            }
+
+            if (quantity > product.getQuantity()) {
+                System.out.println("\n✗ Not enough stock! Available: " + product.getQuantity());
+                return;
+            }
+
+            cart.addItem(product, quantity);
+            System.out.println("\n✓ Added " + quantity + "x " + product.getName() + " to cart!");
+            System.out.printf("  Price after discount: $%.2f each%n", product.getPriceAfterDiscount());
+        } catch (Exception e) {
+            System.out.println("\n✗ Invalid quantity!");
+            scanner.nextLine();
+        }
+    }
+
+    private void viewCart() {
+        DisplayUtil.displayCart(cart.getItems());
+    }
+
+    private void calculateTotal() {
+        if (cart.isEmpty()) {
+            System.out.println("\n✗ Cart is empty!");
+            return;
+        }
+
+        System.out.println("\n╔════════════════════════════════════╗");
+        System.out.println("║         CART SUMMARY               ║");
+        System.out.println("╠════════════════════════════════════╣");
+        System.out.printf("║ Subtotal:            $%12.2f ║%n", cart.getSubtotal());
+        System.out.printf("║ Tax (%.1f%%):           $%12.2f ║%n", cart.getTaxRate(), cart.getTax());
+        System.out.println("╠════════════════════════════════════╣");
+        System.out.printf("║ TOTAL:               $%12.2f ║%n", cart.getTotal());
+        System.out.println("╚════════════════════════════════════╝");
+    }
+
+    private void setTaxRate() {
+        System.out.printf("\nCurrent tax rate: %.1f%%%n", cart.getTaxRate());
+        System.out.print("Enter new tax rate (percentage): ");
+
+        try {
+            double taxRate = scanner.nextDouble();
+            scanner.nextLine();
+
+            if (taxRate < 0 || taxRate > 100) {
+                System.out.println("\n✗ Tax rate must be between 0 and 100!");
+                return;
+            }
+
+            cart.setTaxRate(taxRate);
+            System.out.printf("\n✓ Tax rate updated to %.1f%%%n", taxRate);
+        } catch (Exception e) {
+            System.out.println("\n✗ Invalid tax rate!");
+            scanner.nextLine();
+        }
+    }
+
+    private void generateReceipt() {
+        if (cart.isEmpty()) {
+            System.out.println("\n✗ Cart is empty! Add items before checkout.");
+            return;
+        }
+
+        System.out.print("\nConfirm checkout? (Y/N): ");
+        String confirm = scanner.nextLine().toUpperCase();
+
+        if (confirm.equals("Y")) {
+            DisplayUtil.displayReceipt(cart, inventory);
+            System.out.println("\n✓ Transaction completed successfully!");
+        } else {
+            System.out.println("\n✗ Checkout cancelled.");
+        }
+    }
+
+    public static void main(String[] args) {
+        POSSystem pos = new POSSystem();
+        pos.start();
+    }
+}
+
 
 
