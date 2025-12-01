@@ -203,7 +203,12 @@ public class POSSystem {
             System.out.println("\n✗ Checkout cancelled.");
         }
     }
+        public static void main(String[] args) {
+        POSSystem pos = new POSSystem();
+        pos.start();
+    }
 }
+
 
 
 
